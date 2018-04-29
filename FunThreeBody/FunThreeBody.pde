@@ -1,5 +1,5 @@
 // Rishabh Moudgil
-// rishabhmoudgil.me
+// rishabhmoudgil.com
 
 // Rish's gravitational constant
 float G = 1;
@@ -8,7 +8,6 @@ ArrayList<Body> bodies = new ArrayList<Body>();
 
 class Body {
   PVector location;
-  PVector oLocation;
   PVector velocity;
   PVector acceleration;
   float mass = 1;
@@ -16,7 +15,6 @@ class Body {
 
   Body(float x, float y) {
     this.location = new PVector(x, y);
-    this.oLocation = new PVector(x, y);
     this.velocity = new PVector(random(-randomPush, randomPush), random(-randomPush, randomPush));
     this.acceleration = new PVector(0, 0);
     this.mass = random(1, 5);
@@ -33,9 +31,18 @@ class Body {
   void ApplyForce(PVector force) {
     PVector f = PVector.div(force, mass);
     acceleration.add(f);
+  }
+
+  void Update() {
     velocity.add(acceleration);
-    oLocation.add(velocity);
+    location.add(velocity);
     acceleration.x = acceleration.y = 0;
+  }
+
+  void Draw() {
+    fill(colour);
+    float r = map(mass, 1, 5, 5, 10);
+    ellipse(location.x, location.y, r, r);
   }
 
   boolean OutOfBounds() {
@@ -74,13 +81,11 @@ void draw() {
 
   for (int i = bodies.size() - 1; i >= 0; --i) {
     Body b = bodies.get(i);
-    b.location = b.oLocation;
+    b.Update();
     if (b.OutOfBounds()) {
       bodies.remove(i);
     } else {
-      fill(b.colour);
-      float r = map(b.mass, 1, 5, 5, 10);
-      ellipse(b.location.x, b.location.y, r, r);
+      b.Draw();
     }
   }
 }
