@@ -51,7 +51,7 @@ class Body {
 }
 
 void setup() {
-  size(700, 300);
+  size(672, 300);
 
   int l = 50;
   bodies.add(new Body((width / 2) - l/2, (height / 2)));
